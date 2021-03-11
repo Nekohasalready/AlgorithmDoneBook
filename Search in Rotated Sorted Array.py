@@ -7,8 +7,7 @@
 以测试用例[4,5,6,7,0,1,2] 为例：
 无论如何切分，至少有一半的搜索范围是有序的，我们将利用这一规律构建我们的搜索程序。
 
-首先初始化start和end位置，然后根据end判断数组是不是只有1个值，如果是的话直接和目标值比较，返回检测结果；
-如果数组有多个值，则进行循环：
+首先初始化start和end位置，然后同样根据start<=end的条件进行循环：
 1.更新mid位置；
 2.判断nums[mid]是否等于目标值，如果是则返回Mid,如果不是则继续循环；
 3.判断左侧是否为有序区间（用小于等于号，因为可能此时start和mid已经重合），如果是则继续判断目标值是否位于区间内，如果不是则判断目标值在另一区间中；
@@ -25,27 +24,21 @@ class Solution:
         start=0
         end=len(nums)-1
 
-        if end==0:
-            if nums[0]==target:
-                return 0
-            else:
-                return -1
-        else:
-            while(start<=end):
-                mid=start+(end-start)//2
-                if nums[mid]==target:
-                    return mid
-                elif nums[start]<=nums[mid]:  #左边是有序区间，注意这里用到的都是<=和>=，这是本题与其它题目的最大区别
-                    if nums[start]<=target<=nums[mid]:
-                        end=mid-1
-                    else:
-                        start=mid+1
-                elif nums[mid]<=nums[end]:
-                    if nums[mid]<=target<=nums[end]:
-                        start=mid+1
-                    else:
-                        end=mid-1
-            return -1
+        while(start<=end):
+            mid=start+(end-start)//2
+            if nums[mid]==target:
+                return mid
+            elif nums[start]<=nums[mid]:  #左边是有序区间。这里用的都是<=或者>=号，这是本题与其它题目最大的区别
+                if nums[start]<=target<=nums[mid]:
+                    end=mid-1
+                else:
+                    start=mid+1
+            elif nums[mid]<=nums[end]:
+                if nums[mid]<=target<=nums[end]:
+                    start=mid+1
+                else:
+                    end=mid-1
+        return -1
 
 
                     
